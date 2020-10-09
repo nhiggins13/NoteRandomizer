@@ -41,7 +41,10 @@ class Notes:
         strings_to_remove = []
         for match in re.finditer(pattern, text):
             if random.random() > random_percentage:
-                strings_to_remove.append(re.escape(match.group(0)))
+                matched = re.escape(match.group(0))
+                if pattern == r'([^\s]+)':
+                    matched = " " + matched + " "
+                strings_to_remove.append(matched)
 
         pattern_joined = re.compile("|".join(strings_to_remove))
 
@@ -51,7 +54,7 @@ class Notes:
         return self.remove_randomly(text, pattern=r'([^\s]+)', random_percentage=1-self.random_word_percentage)
 
     def remove_symbols(self, text):
-        return text.replace(self.symbol_rand, "").replace(self.symbol_right,"").replace(self.symbol_left, "")
+        return text.replace(self.symbol_rand, "").replace(self.symbol_right, "").replace(self.symbol_left, "")
 
     def create_random_notes(self, either_or_flag=True, random_flag=True, random_word_flag=False):
         random_document = copy.copy(self.raw_notes)
